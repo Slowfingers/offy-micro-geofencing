@@ -630,15 +630,23 @@ export default function App() {
 
               {/* Fixed Bottom Action Bar */}
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-xl border-t border-slate-100 flex gap-4">
-                <Button 
+                <Button
+                  variant="outline"
+                  className="h-16 rounded-2xl border-slate-200 bg-white hover:bg-slate-50"
+                  onClick={() => setSelectedDiscount(null)}
+                >
+                  <ChevronRight size={24} className="mr-2 text-slate-600 rotate-180" />
+                  {lang === 'ru' ? 'Назад' : 'Orqaga'}
+                </Button>
+                <Button
                   className="flex-1 h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-display font-black text-xl shadow-xl shadow-primary/30 transition-transform active:scale-95"
                   onClick={() => window.open(`https://${selectedDiscount.source}`, "_blank")}
                 >
                   <Zap size={24} className="mr-2" fill="currentColor" />
                   {t.openInTelegram}
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-16 h-16 rounded-2xl border-slate-200 bg-white hover:bg-slate-50"
                   onClick={() => {
                     awardXp(20, lang === 'ru' ? 'Скидка отправлена!' : 'Chegirma ulashildi!', { sharedCount: stats.sharedCount + 1 });
