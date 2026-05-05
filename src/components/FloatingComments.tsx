@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'motion';
+import { motion } from 'motion/react';
 import type { FloatingComment } from '../types/mall';
 
 interface FloatingCommentsProps {
