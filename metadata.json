@@ -1,0 +1,5 @@
+{
+  "name": "SaleSpotter Uz",
+  "description": "Real-time discount aggregator for Uzbekistan stores, parsing Telegram channels and websites with geolocation alerts.",
+  "requestFramePermissions": ["geolocation"]
+}

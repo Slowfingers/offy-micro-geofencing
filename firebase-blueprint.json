@@ -1,0 +1,41 @@
+{
+  "entities": {
+    "Discount": {
+      "title": "Discount",
+      "description": "A parsed discount offer from a store.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier (usually Telegram post ID)" },
+        "title": { "type": "string", "description": "Short title of the discount" },
+        "description": { "type": "string", "description": "Detailed description of the offer" },
+        "discountAmount": { "type": "string", "description": "Amount or percentage of discount (e.g., 50%, -20,000 UZS)" },
+        "store": { "type": "string", "description": "Name of the store" },
+        "category": { "type": "string", "description": "Category of the product (e.g., Electronics, Fashion, Food)" },
+        "image": { "type": "string", "description": "URL of the offer image" },
+        "source": { "type": "string", "description": "Source URL (e.g., t.me/channel/123)" },
+        "validUntil": { "type": "string", "format": "date-time", "description": "Expiration date if known" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When this was scraped" },
+        "isVerified": { "type": "boolean", "description": "Whether the discount was successfully parsed by AI" }
+      },
+      "required": ["id", "title", "store", "createdAt"]
+    },
+    "AppConfig": {
+      "title": "AppConfig",
+      "description": "Global application configuration and state.",
+      "type": "object",
+      "properties": {
+        "lastSync": { "type": "string", "format": "date-time", "description": "Timestamp of the last successful sync" }
+      }
+    }
+  },
+  "firestore": {
+    "/discounts/{discountId}": {
+      "schema": "Discount",
+      "description": "Collection of all scraped and parsed discounts."
+    },
+    "/config/global": {
+      "schema": "AppConfig",
+      "description": "Global settings and sync status."
+    }
+  }
+}
