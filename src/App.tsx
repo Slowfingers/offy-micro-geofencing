@@ -8,20 +8,20 @@ import {
   Navigation,
   ChevronRight,
   Clock,
-  Share2,
-  Heart,
-  X,
-  Languages,
-  ShoppingBag,
-  Smartphone,
-  Utensils,
   Flame,
-  Zap,
-  Map as MapIcon,
+  Heart,
+  Languages,
   Trophy,
-  Award,
+  MapIcon,
+  X,
+  Share2,
+  Zap,
+  Building2,
+  ShoppingBag,
+  Utensils,
+  Smartphone,
   Star,
-  TrendingUp
+  Award,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -144,6 +144,7 @@ export default function App() {
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [showMapModal, setShowMapModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showBrandModal, setShowBrandModal] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [stats, setStats] = useState<UserStats>({
     xp: 0,
@@ -387,6 +388,14 @@ export default function App() {
               onClick={() => toast.success(lang === 'ru' ? 'Уведомления включены!' : 'Bildirishnomalar yoqildi!')}
             >
               <Bell size={18} className="text-slate-600" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-lg hover:bg-slate-100"
+              onClick={() => setShowBrandModal(true)}
+            >
+              <Building2 size={18} className="text-slate-600" />
             </Button>
           </div>
         </div>
@@ -640,6 +649,43 @@ export default function App() {
           )}
         </SheetContent>
       </Sheet>
+
+      {/* Brand Management Dialog */}
+      <Dialog open={showBrandModal} onOpenChange={setShowBrandModal}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>{lang === 'ru' ? 'Управление брендом' : 'Brendni boshqarish'}</DialogTitle>
+            <DialogDescription>
+              {lang === 'ru' ? 'Создайте или обновите информацию о бренде' : 'Brend haqida ma\'lumot yarating yoki yangilang'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{lang === 'ru' ? 'Название бренда' : 'Brend nomi'}</label>
+              <Input placeholder={lang === 'ru' ? 'Например: Zara' : 'Masalan: Zara'} />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{lang === 'ru' ? 'План' : 'Reja'}</label>
+              <select className="w-full p-2 border rounded-lg">
+                <option value="standard">{lang === 'ru' ? 'Стандартный' : 'Standart'}</option>
+                <option value="premium">{lang === 'ru' ? 'Премиум' : 'Premium'}</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">{lang === 'ru' ? 'Категория' : 'Kategoriya'}</label>
+              <Input placeholder={lang === 'ru' ? 'Например: Одежда' : 'Masalan: Kiyimlar'} />
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="outline" className="flex-1" onClick={() => setShowBrandModal(false)}>
+              {lang === 'ru' ? 'Отмена' : 'Bekor qilish'}
+            </Button>
+            <Button className="flex-1">
+              {lang === 'ru' ? 'Сохранить' : 'Saqlash'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Mobile Nav */}
       <nav className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 h-16 bg-slate-900/95 backdrop-blur-xl rounded-full flex justify-around items-center z-50 shadow-2xl px-8 w-[85%] max-w-sm">
