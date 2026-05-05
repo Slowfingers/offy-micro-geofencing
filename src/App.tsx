@@ -44,6 +44,7 @@ import {
 } from "@/components/ui/dialog";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { FloatingComments } from "./components/FloatingComments";
 
 // Types
 interface Discount {
@@ -589,6 +590,14 @@ export default function App() {
                   <p className="text-sm text-slate-600 leading-relaxed">
                     {selectedDiscount.description}
                   </p>
+                </div>
+
+                {/* Flying Clouds - Real-time comments */}
+                <div className="bg-gradient-to-br from-primary/5 to-accent/5 p-4 rounded-lg border border-primary/10">
+                  <h4 className="font-semibold text-slate-900 mb-3">Live Comments</h4>
+                  <div className="relative h-48">
+                    <FloatingComments discountId={selectedDiscount.id} />
+                  </div>
                 </div>
               </div>
 

@@ -58,6 +58,10 @@ export interface Discount {
   isVerified: boolean;
   isFlash?: boolean; // Flash discount for Premium
   brandId?: string; // For B2B partnership
+  store?: string;
+  discountAmount?: string;
+  category?: string;
+  validUntil?: string | null;
 }
 
 // Review and Moderation System

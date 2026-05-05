@@ -6,7 +6,7 @@ import * as cheerio from "cheerio";
 import dotenv from "dotenv";
 import { localDb } from "./src/services/localDatabase.ts";
 import { scrapeAndParseFallback } from "./scraper.ts";
-import { isPointInPolygon, evaluateSmartPushTrigger } from "./src/services/geolocation.ts";
+import { isPointInPolygon, evaluateSmartPushTrigger, updateUserLocation, getDwellTime, selectTopDiscount } from "./src/services/geolocation.ts";
 import { autoFilterReview, getModerationPermissions } from "./src/services/moderationService.ts";
 import { B2BService } from "./src/services/b2bService.ts";
 import type { Mall, UserLocation, SmartPushTrigger, Review, Brand, FlashDiscount } from "./src/types/mall.ts";
@@ -73,12 +73,26 @@ app.put("/api/malls/:id", async (req, res) => {
 // Geolocation
 app.post("/api/check-location", async (req, res) => {
   try {
-    const { lat, lng, mallId } = req.body;
+    const { lat, lng, mallId, userId } = req.body;
     const mall = await localDb.getMall(mallId);
     if (!mall) return res.status(404).json({ error: "Mall not found" });
-    
-    const insidePolygon = isPointInPolygon({ lat, lng }, mall.polygon);
-    res.json({ insidePolygon });
+
+    const location = { lat, lng };
+    const insidePolygon = isPointInPolygon(location, mall.polygon);
+
+    // Track dwell time if userId is provided
+    let dwellTime = 0;
+    let justEntered = false;
+    let justExited = false;
+
+    if (userId) {
+      const tracking = updateUserLocation(userId, mallId, location, mall.polygon);
+      dwellTime = tracking.dwellTime;
+      justEntered = tracking.justEntered;
+      justExited = tracking.justExited;
+    }
+
+    res.json({ insidePolygon, dwellTime, justEntered, justExited });
   } catch (error) {
     console.error("Error checking location:", error);
     res.status(500).json({ error: "Failed to check location" });
@@ -97,6 +111,26 @@ app.post("/api/evaluate-trigger", async (req, res) => {
   } catch (error) {
     console.error("Error evaluating trigger:", error);
     res.status(500).json({ error: "Failed to evaluate trigger" });
+  }
+});
+
+app.post("/api/top-discount", async (req, res) => {
+  try {
+    const { userLocation, mallId, userPreferences } = req.body;
+    const discounts = await localDb.getDiscounts();
+    const mall = mallId ? await localDb.getMall(mallId) : null;
+
+    const topDiscount = selectTopDiscount({
+      discounts,
+      userLocation: userLocation ? { lat: userLocation.lat, lng: userLocation.lng } : undefined,
+      mallPolygon: mall?.polygon,
+      userPreferences
+    });
+
+    res.json(topDiscount);
+  } catch (error) {
+    console.error("Error selecting top discount:", error);
+    res.status(500).json({ error: "Failed to select top discount" });
   }
 });
 
