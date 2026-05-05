@@ -1,12 +1,4 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
-import fs from "fs";
-import path from "path";
-
-// Load Firebase Config
-const firebaseConfig = JSON.parse(fs.readFileSync(path.join(process.cwd(), "firebase-applet-config.json"), "utf8"));
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+import { localDb } from "./src/services/localDatabase.ts";
 
 // Sample malls with approximate polygons for Tashkent
 const sampleMalls = [
@@ -78,14 +70,14 @@ const sampleMalls = [
 ];
 
 async function seedMalls() {
-  console.log("Seeding malls to Firestore...");
+  console.log("Seeding malls to local database...");
   
   for (const mall of sampleMalls) {
     const id = mall.name.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now();
     const now = new Date().toISOString();
     
     try {
-      await setDoc(doc(db, "malls", id), {
+      await localDb.setMall(id, {
         id,
         ...mall,
         createdAt: now,

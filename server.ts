@@ -1,12 +1,10 @@
 import express from "express";
-import { createServer as createViteServer } from "vite";
+import { createViteServer } from "vite";
 import path from "path";
 import axios from "axios";
 import * as cheerio from "cheerio";
 import dotenv from "dotenv";
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, doc, setDoc, getDocs, query, orderBy, limit } from "firebase/firestore";
-import fs from "fs";
+import { localDb } from "./src/services/localDatabase.ts";
 import { scrapeAndParseFallback } from "./scraper.ts";
 import { isPointInPolygon, evaluateSmartPushTrigger } from "./src/services/geolocation.ts";
 import { MallService } from "./src/services/mallService.ts";

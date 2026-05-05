@@ -1,25 +1,9 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import dotenv from "dotenv";
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import fs from "fs";
-import path from "path";
+import { localDb } from "./src/services/localDatabase.ts";
 
 dotenv.config();
-
-// Load Firebase Config safely
-let db: any;
-try {
-  const configPath = path.join(process.cwd(), "firebase-applet-config.json");
-  if (fs.existsSync(configPath)) {
-    const firebaseConfig = JSON.parse(fs.readFileSync(configPath, "utf8"));
-    const firebaseApp = initializeApp(firebaseConfig);
-    db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
-  }
-} catch (e) {
-  console.error("Could not initialize Firebase in scraper:", e);
-}
 
 const CHANNELS = [
   { id: "korzinkauz", name: "Korzinka", category: "Food" },
@@ -125,18 +109,16 @@ export async function scrapeAndParseFallback() {
 
   console.log(`Found ${discounts.length} discounts via regex fallback.`);
 
-  if (db) {
-    let savedCount = 0;
-    for (const discount of discounts) {
-      try {
-        await setDoc(doc(db, "discounts", discount.id), discount, { merge: true });
-        savedCount++;
-      } catch (e) {
-        console.error("Error saving discount:", e);
-      }
+  let savedCount = 0;
+  for (const discount of discounts) {
+    try {
+      await localDb.setDiscount(discount.id, discount);
+      savedCount++;
+    } catch (e) {
+      console.error("Error saving discount:", e);
     }
-    console.log(`Successfully saved ${savedCount} discounts to database.`);
   }
+  console.log(`Successfully saved ${savedCount} discounts to database.`);
   
   return discounts;
 }

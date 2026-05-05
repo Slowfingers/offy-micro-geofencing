@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node server.ts",
-    "dev": "tsx server.ts",
+    "start": "node server-local.ts",
+    "dev": "tsx server-local.ts",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
