@@ -334,94 +334,71 @@ export default function App() {
   return (
     <div className="min-h-screen bg-surface selection:bg-primary/20 pb-24 sm:pb-8">
       {/* Header */}
-      <header className="sticky top-0 z-50 glass border-b border-white/20">
-        <div className="max-w-5xl mx-auto px-4 h-20 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/30 rotate-[-6deg] transform transition-transform hover:rotate-0 relative">
-              <Zap size={24} strokeWidth={2.5} fill="currentColor" />
-              {isSyncing && (
-                <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-white border-2 border-primary"></span>
-                </span>
-              )}
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+              <Zap size={20} strokeWidth={2.5} fill="currentColor" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-2xl font-display font-black tracking-tight leading-none">SaleSpotter</h1>
-              <p className="text-[10px] font-bold text-primary tracking-[0.2em] uppercase mt-1 flex items-center gap-1">
-                Uzbekistan
-                {isSyncing && <span className="text-slate-400 italic normal-case tracking-normal">({lang === 'ru' ? 'обновляем...' : 'yangilanmoqda...'})</span>}
-              </p>
+              <h1 className="text-xl font-display font-bold tracking-tight">SaleSpotter</h1>
+              <p className="text-xs text-slate-500 mt-0.5">Uzbekistan</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setLang(lang === "ru" ? "uz" : "ru")}
-              className="rounded-xl hover:bg-white/50 bg-white/30"
+              className="rounded-lg hover:bg-slate-100"
             >
-              <Languages size={20} className="text-slate-700" />
+              <Languages size={18} className="text-slate-600" />
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setShowProfileModal(true)}
-              className="hidden sm:flex rounded-xl hover:bg-white/50 bg-white/30 transition-colors"
+              className="hidden sm:flex rounded-lg hover:bg-slate-100"
             >
-              <Trophy size={20} className="text-amber-500" />
+              <Trophy size={18} className="text-amber-500" />
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setShowMapModal(true)}
-              className="hidden sm:flex rounded-xl hover:bg-white/50 bg-white/30 transition-colors"
+              className="hidden sm:flex rounded-lg hover:bg-slate-100"
             >
-              <MapIcon size={20} className="text-slate-700" />
+              <MapIcon size={18} className="text-slate-600" />
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => setViewMode(viewMode === "feed" ? "favorites" : "feed")}
-              className={cn("hidden sm:flex rounded-xl hover:bg-white/50 bg-white/30 transition-colors", viewMode === "favorites" && "bg-white/60")}
+              className={cn("hidden sm:flex rounded-lg hover:bg-slate-100", viewMode === "favorites" && "bg-slate-100")}
             >
-              <Heart size={20} className={cn(viewMode === "favorites" ? "fill-primary text-primary" : "text-slate-700")} />
+              <Heart size={18} className={cn(viewMode === "favorites" ? "fill-primary text-primary" : "text-slate-600")} />
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="rounded-xl hover:bg-white/50 bg-white/30 relative"
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-lg hover:bg-slate-100 relative"
               onClick={() => toast.success(lang === 'ru' ? 'Уведомления включены!' : 'Bildirishnomalar yoqildi!')}
             >
-              <Bell size={20} className="text-slate-700" />
-              <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white animate-pulse" />
+              <Bell size={18} className="text-slate-600" />
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8 space-y-12">
-        {/* Hero & Search */}
-        <section className="space-y-8 text-center pt-4">
-          <div className="space-y-4">
-            <h2 className="text-4xl md:text-6xl font-display font-black tracking-tight">
-              {lang === 'ru' ? 'Найди свою ' : 'O\'z '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                {lang === 'ru' ? 'выгоду' : 'foydangizni'}
-              </span>
-              {lang === 'ru' ? ' сегодня' : ' toping'}
-            </h2>
-            <p className="text-slate-500 font-medium text-lg max-w-xl mx-auto">
-              {lang === 'ru' ? 'Самые горячие скидки и акции со всего Узбекистана в одном месте.' : 'Butun O\'zbekiston bo\'ylab eng qaynoq chegirmalar va aksiyalar bitta joyda.'}
-            </p>
-          </div>
-
-          <div className="relative group max-w-2xl mx-auto">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={24} />
-            <Input 
+      <main className="max-w-5xl mx-auto px-4 py-6 space-y-8">
+        {/* Search */}
+        <section className="max-w-2xl mx-auto">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <Input
               placeholder={t.search}
-              className="h-16 pl-16 pr-6 rounded-full border-0 bg-white text-lg shadow-xl shadow-slate-200/50 focus-visible:ring-4 focus-visible:ring-primary/20 transition-all"
+              className="h-12 pl-12 pr-4 rounded-xl border border-slate-200 bg-white text-sm focus-visible:ring-2 focus-visible:ring-primary/20"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -442,26 +419,23 @@ export default function App() {
                 [1, 2, 3].map(i => <Skeleton key={i} className="min-w-[300px] h-48 rounded-[32px]" />)
               ) : (
                 nearbyDiscounts.map(d => (
-                  <Card 
-                    key={d.id} 
-                    className="min-w-[300px] sm:min-w-[350px] snap-center rounded-[32px] border-0 bg-white hover:-translate-y-1 transition-all cursor-pointer group shadow-lg shadow-slate-200/50 overflow-hidden relative"
+                  <Card
+                    key={d.id}
+                    className="min-w-[280px] sm:min-w-[320px] snap-center rounded-2xl border border-slate-200 bg-white cursor-pointer hover:border-slate-300 transition-colors"
                     onClick={() => setSelectedDiscount(d)}
                   >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10 transition-transform group-hover:scale-150" />
-                    <CardContent className="p-5 flex items-center gap-5 relative z-10">
-                      <div className="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 shadow-md">
-                        <img 
+                    <CardContent className="p-4 flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100">
+                        <img
                           src={`/api/image?url=${encodeURIComponent(d.source)}`}
-                          className="w-full h-full object-cover" 
+                          className="w-full h-full object-cover"
                           referrerPolicy="no-referrer"
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="inline-block bg-primary text-white font-display font-black text-sm px-2 py-0.5 rounded-lg mb-1 rotate-[-2deg]">
-                          {d.discountAmount}
-                        </div>
-                        <h4 className="font-bold text-slate-800 text-base truncate">{d.store}</h4>
-                        <p className="text-xs text-slate-500 font-medium truncate mt-0.5">{d.title}</p>
+                        <div className="text-sm font-bold text-primary mb-1">{d.discountAmount}</div>
+                        <h4 className="font-semibold text-slate-900 text-sm truncate">{d.store}</h4>
+                        <p className="text-xs text-slate-500 truncate mt-0.5">{d.title}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -472,25 +446,25 @@ export default function App() {
         )}
 
         {/* Categories & Main Feed */}
-        <section className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            <h2 className="text-3xl font-display font-black tracking-tight">
+        <section className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-display font-bold tracking-tight">
               {viewMode === "favorites" ? t.favorites : t.allDeals}
             </h2>
-            <Tabs value={activeCategory} onValueChange={setActiveCategory} className="w-full sm:w-auto">
-              <TabsList className="bg-transparent p-0 h-auto w-full sm:w-auto overflow-x-auto no-scrollbar justify-start sm:justify-center gap-2">
-                {CATEGORIES.map(cat => (
-                  <TabsTrigger 
-                    key={cat.name} 
-                    value={cat.name}
-                    className="rounded-full px-6 py-3 text-sm font-bold bg-white text-slate-600 border border-slate-200 data-[state=active]:bg-slate-900 data-[state=active]:text-white data-[state=active]:border-slate-900 shadow-sm transition-all"
-                  >
-                    {lang === "ru" ? cat.ru : cat.uz}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
           </div>
+          <Tabs value={activeCategory} onValueChange={setActiveCategory} className="w-full">
+            <TabsList className="bg-slate-100 p-1 h-auto w-full overflow-x-auto no-scrollbar justify-start gap-1">
+              {CATEGORIES.map(cat => (
+                <TabsTrigger
+                  key={cat.name}
+                  value={cat.name}
+                  className="rounded-lg px-4 py-2 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all"
+                >
+                  {lang === "ru" ? cat.ru : cat.uz}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading ? (
@@ -507,61 +481,50 @@ export default function App() {
                 <h3 className="text-2xl font-display font-bold text-slate-600">{t.noFavorites}</h3>
               </div>
             ) : filteredDiscounts.length > 0 ? (
-              filteredDiscounts.map((discount, idx) => (
+              filteredDiscounts.map((discount, index) => (
                 <motion.div
                   key={discount.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
+                  transition={{ duration: 0.3, delay: index * 0.02 }}
                 >
-                  <Card 
-                    className="group border-0 bg-white rounded-[32px] p-2 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 cursor-pointer"
+                  <Card
+                    className="rounded-2xl border border-slate-200 bg-white hover:border-slate-300 transition-colors cursor-pointer overflow-hidden"
                     onClick={() => setSelectedDiscount(discount)}
                   >
-                    <div className="relative aspect-square overflow-hidden rounded-[24px]">
-                      <img 
+                    <div className="relative h-40 overflow-hidden">
+                      <img
                         src={`/api/image?url=${encodeURIComponent(discount.source)}`}
                         alt={discount.store}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      
-                      <div className="absolute top-4 left-4">
-                        <div className="bg-primary text-white font-display font-black text-2xl px-4 py-1.5 rounded-xl shadow-lg rotate-[-4deg] group-hover:rotate-0 transition-transform">
+                      <div className="absolute top-3 left-3">
+                        <div className="bg-primary text-white font-semibold text-sm px-3 py-1 rounded-lg">
                           {discount.discountAmount}
                         </div>
                       </div>
-                      <button 
+                      <button
                         onClick={(e) => toggleFavorite(discount.id, e)}
-                        className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-400 hover:text-primary hover:scale-110 transition-all shadow-sm"
+                        className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center text-slate-400 hover:text-primary transition-colors"
                       >
-                        <Heart size={22} className={cn(favorites.has(discount.id) && "fill-primary text-primary")} />
+                        <Heart size={18} className={cn(favorites.has(discount.id) && "fill-primary text-primary")} />
                       </button>
                     </div>
-                    <CardContent className="p-5 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-display font-black truncate pr-2 text-slate-800">{discount.store}</h3>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-100 px-2 py-1 rounded-md">
-                          {discount.category}
-                        </span>
+                    <CardContent className="p-4 space-y-3">
+                      <div>
+                        <h3 className="font-semibold text-slate-900 text-base truncate">{discount.store}</h3>
+                        <h4 className="text-sm text-slate-600 line-clamp-2 leading-snug mt-1">{discount.title}</h4>
                       </div>
-                      <h4 className="font-bold text-sm text-slate-600 line-clamp-2 leading-snug">{discount.title}</h4>
 
-                      <div className="pt-3 mt-3 space-y-2">
-                        <div className="flex items-center gap-1.5 text-slate-400">
-                          <Clock size={14} />
-                          <span className="text-[11px] font-bold uppercase tracking-wider">
-                            {t.added}: {formatDate(discount.createdAt)}
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-2 text-xs text-slate-500">
+                        <Clock size={14} />
+                        <span>{formatDate(discount.createdAt)}</span>
                         {discount.validUntil && (
-                          <div className="flex items-center gap-1.5 text-slate-400">
-                            <Clock size={14} />
-                            <span className="text-[11px] font-bold uppercase tracking-wider">
-                              {t.validUntilLabel}: {discount.validUntil}
-                            </span>
-                          </div>
+                          <>
+                            <span>•</span>
+                            <span>{discount.validUntil}</span>
+                          </>
                         )}
                       </div>
                     </CardContent>
@@ -582,101 +545,71 @@ export default function App() {
 
       {/* Detail Sheet */}
       <Sheet open={!!selectedDiscount} onOpenChange={() => setSelectedDiscount(null)}>
-        <SheetContent side="bottom" className="h-[90vh] sm:h-[85vh] rounded-t-[40px] p-0 border-none overflow-hidden bg-surface">
+        <SheetContent side="bottom" className="h-[85vh] sm:h-[80vh] rounded-t-2xl p-0 border border-slate-200 bg-white">
           {selectedDiscount && (
             <div className="h-full flex flex-col">
-              <div className="relative h-2/5 sm:h-1/2">
-                <img 
+              <div className="relative h-64">
+                <img
                   src={`/api/image?url=${encodeURIComponent(selectedDiscount.source)}`}
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
                 />
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setSelectedDiscount(null)}
-                  className="absolute top-6 right-6 w-12 h-12 rounded-full bg-black/20 backdrop-blur-md text-white hover:bg-black/40"
+                  className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-slate-600"
                 >
-                  <X size={24} />
+                  <X size={20} />
                 </Button>
-                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-surface to-transparent" />
-                
-                <div className="absolute -bottom-6 left-8 bg-primary text-white font-display font-black text-4xl px-6 py-2 rounded-2xl shadow-xl shadow-primary/30 rotate-[-3deg]">
-                  {selectedDiscount.discountAmount}
-                </div>
               </div>
-              
-              <div className="flex-1 px-8 py-10 space-y-8 overflow-y-auto no-scrollbar pb-32">
+
+              <div className="flex-1 p-6 space-y-6 overflow-y-auto pb-32">
                 <div className="space-y-3">
-                  <Badge variant="secondary" className="bg-white text-slate-600 border border-slate-200 font-bold px-3 py-1 rounded-lg">
-                    {selectedDiscount.category}
-                  </Badge>
-                  <h2 className="text-4xl font-display font-black leading-tight text-slate-900">{selectedDiscount.store}</h2>
-                  <h3 className="text-xl font-bold text-slate-500">{selectedDiscount.title}</h3>
+                  <div className="text-sm font-bold text-primary">{selectedDiscount.discountAmount}</div>
+                  <h2 className="text-2xl font-bold text-slate-900">{selectedDiscount.store}</h2>
+                  <h3 className="text-base text-slate-600">{selectedDiscount.title}</h3>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100">
-                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-primary">
-                      <Clock size={24} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t.added}</p>
-                      <p className="font-bold text-sm text-slate-800">{formatDate(selectedDiscount.createdAt)}</p>
-                    </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-slate-50 p-3 rounded-lg">
+                    <p className="text-xs text-slate-500">{t.added}</p>
+                    <p className="text-sm font-semibold text-slate-900">{formatDate(selectedDiscount.createdAt)}</p>
                   </div>
-                  <div className="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100">
-                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-primary">
-                      <Clock size={24} />
+                  {selectedDiscount.validUntil && (
+                    <div className="bg-slate-50 p-3 rounded-lg">
+                      <p className="text-xs text-slate-500">{t.validUntil}</p>
+                      <p className="text-sm font-semibold text-slate-900">{selectedDiscount.validUntil}</p>
                     </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t.validUntil}</p>
-                      <p className="font-bold text-sm text-slate-800">{selectedDiscount.validUntil || t.limited}</p>
-                    </div>
-                  </div>
-                  <div 
-                    className="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors active:scale-95"
-                    onClick={() => setShowMapModal(true)}
-                  >
-                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-primary">
-                      <MapPin size={24} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t.distance}</p>
-                      <p className="font-bold text-sm text-slate-800">~1.2 km</p>
-                    </div>
-                    <ChevronRight size={20} className="text-slate-300 ml-auto" />
-                  </div>
+                  )}
                 </div>
 
-                <div className="space-y-4 bg-white p-6 rounded-[32px] shadow-sm border border-slate-100">
-                  <h4 className="font-display font-black text-xl text-slate-900">{t.about}</h4>
-                  <p className="text-slate-600 leading-relaxed font-medium text-lg">
+                <div className="bg-slate-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-slate-900 mb-2">{t.about}</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">
                     {selectedDiscount.description}
                   </p>
                 </div>
               </div>
 
               {/* Fixed Bottom Action Bar */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-xl border-t border-slate-100 flex gap-4">
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-slate-200 flex gap-3">
                 <Button
                   variant="outline"
-                  className="h-16 rounded-2xl border-slate-200 bg-white hover:bg-slate-50"
+                  className="flex-1 h-12 rounded-lg border-slate-200"
                   onClick={() => setSelectedDiscount(null)}
                 >
-                  <ChevronRight size={24} className="mr-2 text-slate-600 rotate-180" />
                   {lang === 'ru' ? 'Назад' : 'Orqaga'}
                 </Button>
                 <Button
-                  className="flex-1 h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-display font-black text-xl shadow-xl shadow-primary/30 transition-transform active:scale-95"
+                  className="flex-1 h-12 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold"
                   onClick={() => window.open(`https://${selectedDiscount.source}`, "_blank")}
                 >
-                  <Zap size={24} className="mr-2" fill="currentColor" />
                   {t.openInTelegram}
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-16 h-16 rounded-2xl border-slate-200 bg-white hover:bg-slate-50"
+                  className="w-12 h-12 rounded-lg border-slate-200"
                   onClick={() => {
                     awardXp(20, lang === 'ru' ? 'Скидка отправлена!' : 'Chegirma ulashildi!', { sharedCount: stats.sharedCount + 1 });
                     if (navigator.share) {
@@ -691,7 +624,7 @@ export default function App() {
                     }
                   }}
                 >
-                  <Share2 size={24} className="text-slate-600" />
+                  <Share2 size={20} className="text-slate-600" />
                 </Button>
               </div>
             </div>
