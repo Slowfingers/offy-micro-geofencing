@@ -100,7 +100,9 @@ const TRANSLATIONS = {
     noFavorites: "У вас пока нет сохраненных скидок",
     distance: "Дистанция",
     validUntil: "Срок действия",
-    limitedOffer: "Ограниченное предложение"
+    limitedOffer: "Ограниченное предложение",
+    added: "Добавлено",
+    validUntilLabel: "Истекает"
   },
   uz: {
     search: "Chegirmalar va brendlarni qidirish...",
@@ -123,7 +125,9 @@ const TRANSLATIONS = {
     noFavorites: "Sizda hozircha saqlangan chegirmalar yo'q",
     distance: "Masofa",
     validUntil: "Amal qilish muddati",
-    limitedOffer: "Cheklangan taklif"
+    limitedOffer: "Cheklangan taklif",
+    added: "Qo'shilgan",
+    validUntilLabel: "Tugash vaqti"
   }
 };
 
@@ -150,6 +154,14 @@ export default function App() {
   });
 
   const t = TRANSLATIONS[lang];
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
+  };
 
   useEffect(() => {
     loadDiscounts();
@@ -535,14 +547,22 @@ export default function App() {
                         </span>
                       </div>
                       <h4 className="font-bold text-sm text-slate-600 line-clamp-2 leading-snug">{discount.title}</h4>
-                      
-                      <div className="pt-3 mt-3 flex items-center justify-between border-t border-slate-100">
+
+                      <div className="pt-3 mt-3 space-y-2">
                         <div className="flex items-center gap-1.5 text-slate-400">
                           <Clock size={14} />
                           <span className="text-[11px] font-bold uppercase tracking-wider">
-                            {discount.validUntil ? `${t.expires} ${discount.validUntil}` : t.limited}
+                            {t.added}: {formatDate(discount.createdAt)}
                           </span>
                         </div>
+                        {discount.validUntil && (
+                          <div className="flex items-center gap-1.5 text-slate-400">
+                            <Clock size={14} />
+                            <span className="text-[11px] font-bold uppercase tracking-wider">
+                              {t.validUntilLabel}: {discount.validUntil}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </CardContent>
                   </Card>
@@ -596,6 +616,15 @@ export default function App() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100">
+                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-primary">
+                      <Clock size={24} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t.added}</p>
+                      <p className="font-bold text-sm text-slate-800">{formatDate(selectedDiscount.createdAt)}</p>
+                    </div>
+                  </div>
                   <div className="bg-white p-4 rounded-2xl flex items-center gap-4 shadow-sm border border-slate-100">
                     <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-primary">
                       <Clock size={24} />
