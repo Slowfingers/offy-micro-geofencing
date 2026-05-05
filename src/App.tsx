@@ -145,6 +145,7 @@ export default function App() {
   const [showMapModal, setShowMapModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showBrandModal, setShowBrandModal] = useState(false);
+  const [showScratchModal, setShowScratchModal] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [stats, setStats] = useState<UserStats>({
     xp: 0,
@@ -455,6 +456,51 @@ export default function App() {
           </section>
         )}
 
+        {/* Flash Discounts (Premium Brands) */}
+        {viewMode === "feed" && (
+          <section className="space-y-4">
+            <div className="flex items-center justify-between px-2">
+              <h3 className="font-display font-black text-2xl flex items-center gap-2">
+                <Sparkles size={24} className="text-accent" fill="currentColor" />
+                {lang === 'ru' ? 'Flash Скидки' : 'Flash Chegirmalar'}
+              </h3>
+              <Badge variant="secondary" className="bg-accent/10 text-accent border-accent/20">
+                Premium
+              </Badge>
+            </div>
+            <div className="flex overflow-x-auto gap-4 pb-6 pt-2 px-2 no-scrollbar snap-x">
+              {loading ? (
+                [1, 2].map(i => <Skeleton key={i} className="min-w-[280px] h-40 rounded-2xl" />)
+              ) : (
+                discounts.filter(d => d.isFlash).slice(0, 3).map(d => (
+                  <Card
+                    key={d.id}
+                    className="min-w-[280px] snap-center rounded-2xl border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-transparent cursor-pointer hover:border-accent/50 transition-all"
+                    onClick={() => setSelectedDiscount(d)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="bg-accent text-white font-bold text-xs px-2 py-1 rounded-full">
+                          FLASH
+                        </div>
+                        <div className="text-lg font-black text-accent">{d.discountAmount}</div>
+                      </div>
+                      <h4 className="font-bold text-slate-900 text-base truncate">{d.store}</h4>
+                      <p className="text-sm text-slate-600 line-clamp-2 mt-1">{d.title}</p>
+                      {d.validUntil && (
+                        <div className="mt-3 flex items-center gap-1 text-xs text-slate-500">
+                          <Clock size={12} />
+                          {lang === 'ru' ? 'До:' : 'gacha:'} {d.validUntil}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </section>
+        )}
+
         {/* Categories & Main Feed */}
         <section className="space-y-6">
           <div className="flex items-center justify-between">
@@ -608,6 +654,28 @@ export default function App() {
                     <FloatingComments discountId={selectedDiscount.id} />
                   </div>
                 </div>
+
+                {/* Scratch to Win - For Premium Brands */}
+                {selectedDiscount.isFlash && (
+                  <div className="bg-gradient-to-br from-accent/10 to-primary/10 p-4 rounded-lg border border-accent/20">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+                        <Sparkles size={18} className="text-accent" />
+                        Scratch to Win
+                      </h4>
+                      <Badge className="bg-accent text-white">Premium</Badge>
+                    </div>
+                    <p className="text-sm text-slate-600 mb-4">
+                      {lang === 'ru' ? 'Сотрите карточку и получите эксклюзивный промокод!' : 'Kartochkani qirqibing va eksklyuziv promokod oling!'}
+                    </p>
+                    <Button
+                      className="w-full bg-accent hover:bg-accent/90 text-white"
+                      onClick={() => setShowScratchModal(true)}
+                    >
+                      {lang === 'ru' ? 'Сотрать карточку' : 'Kartochkani qirqish'}
+                    </Button>
+                  </div>
+                )}
               </div>
 
               {/* Fixed Bottom Action Bar */}
@@ -684,6 +752,46 @@ export default function App() {
               {lang === 'ru' ? 'Сохранить' : 'Saqlash'}
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Scratch to Win Dialog */}
+      <Dialog open={showScratchModal} onOpenChange={setShowScratchModal}>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="text-accent" size={24} />
+              Scratch to Win
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="relative aspect-[3/2] bg-gradient-to-br from-accent to-primary rounded-2xl overflow-hidden cursor-pointer group">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-white text-center">
+                  <div className="text-4xl mb-2">🎁</div>
+                  <div className="font-bold text-lg">PROMO2025</div>
+                  <div className="text-sm opacity-90">20% OFF</div>
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-slate-400/80 group-hover:bg-slate-400/60 transition-all flex items-center justify-center">
+                <div className="text-white font-bold text-xl">
+                  {lang === 'ru' ? 'Сотрать!' : 'Qirqish!'}
+                </div>
+              </div>
+            </div>
+            <p className="text-sm text-slate-600 text-center">
+              {lang === 'ru' ? 'Нажмите чтобы раскрыть промокод' : 'Promokodni ochirish uchun bosing'}
+            </p>
+          </div>
+          <Button
+            className="w-full"
+            onClick={() => {
+              toast.success(lang === 'ru' ? 'Промокод скопирован!' : 'Promokod nusxalandi!');
+              setShowScratchModal(false);
+            }}
+          >
+            {lang === 'ru' ? 'Получить промокод' : 'Promokod olish'}
+          </Button>
         </DialogContent>
       </Dialog>
 
